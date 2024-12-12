@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:sec="http://thymeleaf.org/thymeleaf-extras-springsecurity6">
+    <head th:fragment="head">
+        <title>Ejercicio2</title>
+        <meta charset="UTF-8">
+        <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+        <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet"/>
+        <style>
+            body {
+                background-color: #f0f8ff;
+                color: #003366;
+            }
+            .header {
+                background-color: #007bff; 
+            }
+            .header h1, .header span {
+                color: white;
+            }
+            .btn-dark {
+                background-color: #0056b3; 
+                border-color: #004085;
+            }
+            .btn-dark:hover {
+                background-color: #003366; 
+            }
+            footer {
+                background-color: #00aaff; 
+                color: white;
+            }
+        </style>
+        <script th:src="@{/js/rutinas.js}"></script>
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>   
+    </head>
+    <body>
+        <header th:fragment="header" class="header py-2">
+            <section id="main-header">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h1><i class="fas fa-cog"></i> [[#{plantilla.suTienda}]]</h1>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <ul class="navbar-nav" sec:authorize="isAuthenticated()">
+                                <li class="nav-item text-white my-auto">
+                                    <img th:src="@{${session.usuarioImagen}}" alt="your image" height="40" class="rounded-circle border border-white"/>
+                                    <span sec:authentication='name'>Usuario</span>
+                                </li>
+                                <li class="nav-item my-auto">
+                                    <form method="post" th:action="@{/logout}">
+                                        <button class="btn btn-dark">
+                                            <i class="fas fa-sign-out-alt"></i>
+                                        </button>
+                                    </form>
+                                </li>                            
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </header>
+
+        <footer th:fragment="footer" class="mt-5 p-2">
+            <div class="container">
+                <div class="col text-center">
+                    <p class="lead">&COPY; [[#{plantilla.derechos}]]</p>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

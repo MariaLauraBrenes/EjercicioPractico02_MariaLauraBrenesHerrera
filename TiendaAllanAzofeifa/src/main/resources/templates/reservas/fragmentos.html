@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns="http://www.w3.org/1999/xhtml">
+    <head th:replace="~{layout/plantilla :: head}">
+        <title>Reservas</title>
+    </head>
+ <section th:fragment="listadoEventos" id="eventos">
+            <div class="container">
+                <h2>[[#{index.nuestrosEventos}]]</h2>
+                <div class="row row-cols-3" th:if="${eventos != null and !eventos.empty}">
+                    <div class="card" th:each="evento : ${eventos}">
+                        <div class="card-body">
+                            <h5 class="card-title">[[${evento.nombre}]]</h5>
+                            <figure>
+                                <img th:src="@{${evento.imagenRuta}}" height="200"/>
+                                <figcaption>[[${evento.fechaInicio}]] - [[${evento.fechaFin}]]</figcaption>
+                            </figure>
+                            <form>
+                                <input type="hidden" name="idEvento" th:value="${evento.idEventos}"/>
+                                <button class="btn btn-light" onclick="addReserva(this.form)" type="button">
+                                    Reservar
+                                </button>
+                            </form>
+                            <p class="card-text">[[${evento.descripcion}]]</p>
+                        </div>
+                    </div>
+                </div>
+                <div th:if="${eventos == null or eventos.empty}">
+                    [[#{reservas.noEventos}]]
+                </div>
+            </div>
+        </section>
+
+        <div th:fragment="verReservas" th:unless="${#lists.isEmpty(listaReservas)}">            
+            <form action="/reservas/listado">
+                <button type="submit" class="btn btn-primary">
+                    Ir a Reservas [[${totalReservas}]]
+                </button>
+            </form>
+        </div>     
+
+        <section th:fragment="listadoReservas" id="listaReservas">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>[[#{reservas.titulo}]]</h4>
+                            </div>
+                            <div th:if="${reservas != null and !reservas.empty}">
+                                <table class="table table-striped">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>[[#{evento.nombre}]]</th>
+                                            <th>[[#{reservas.fechaReserva}]]</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="reserva, contador : ${reservas}">
+                                            <td>[[${contador.index + 1}]]</td>
+                                            <td>[[${reserva.eventos.nombre}]]</td>
+                                            <td>[[${#dates.format(reserva.fechaReserva, 'dd/MM/yyyy HH:mm')}]]</td>
+                                            <td>
+                                                <form>
+                                                    <input type="hidden" name="idEvento" th:value="${reserva.eventos.idEventos}"/>
+                                                    <button class="btn btn-danger" onclick="removeReserva(this.form)" type="button">
+                                                        Eliminar
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center p-2" th:if="${reservas == null or reservas.empty}">
+                                [[#{reservas.noMostrar}]]
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card text-center bg-primary text-white mb-3">
+                            <div class="card-body">
+                                <h3>[[#{reservas.totalReservas}]]</h3>
+                                <h4 class="fs-4">[[${totalReservas}]]</h4>
+                            </div>
+                        </div>
+                        <div class="card text-center bg-success text-white mb-3">
+                            <div class="card-body">
+                                <a th:href="@{/}"
+                                   class="btn btn-success">
+                                    Seguir Reservando
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
